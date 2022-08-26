@@ -29,11 +29,12 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 	})
 
 	// Seção 3 - Exercicio 2
-	it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
+	it.only('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
 		cy.get('#firstName').type('Gustavo')
 		cy.get('#lastName').type('Henrique Videira Martins')
 		cy.get('#email').type('gustavo@magussistemas,com.br')
 		cy.get('#phone').type('1899999999')
+		cy.get('#open-text-area').type('Teste de automação cypress', {delay: 0})
 
 		cy.get('button[type="submit"]').click()
 		cy.get('.error').should('be.visible')
