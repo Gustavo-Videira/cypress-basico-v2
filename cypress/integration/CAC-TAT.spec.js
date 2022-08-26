@@ -200,4 +200,60 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 		cy.visit('./src/privacy.html')
 		cy.contains('CAC TAT - Política de privacidade').should('be.visible')
 	})
+
+	// Seção 12 - Exercicio 3
+	it('exibe e esconde as mensagens de sucesso e erro usando o .invoke', () => {
+		cy.get('.success')
+		  .should('not.be.visible')
+		  .invoke('show')
+		  .should('be.visible').and('contain', 'Mensagem enviada com sucesso.')
+		  .invoke('hide')
+		  .should('not.be.visible')
+		cy.get('.error')
+		  .should('not.be.visible')
+		  .invoke('show')
+		  .should('be.visible').and('contain', 'Valide os campos obrigatórios!')
+		  .invoke('hide')
+		  .should('not.be.visible')
+	})
+
+	// Seção 12 - Exercicio 4
+	it('preenche a area de texto usando o comando invoke', function() {
+		const longText = Cypress._.repeat('0123456789', 20)
+
+		cy.get('#open-text-area')
+			.invoke('val', longText)
+			.should('have.value', longText)
+	})
+
+	// Seção 12 - Exercicio 5
+	it('faz uma requisição HTTP', function() {
+		// cy.request({
+		// 	method: 'GET',
+		// 	url: 'https://cac-tat.s3.eu-central-1.amazonaws.com/index.html'
+		// }).then((response) => {
+		// 	expect(response.status).to.equal(200)
+		// 	expect(response.statusText).to.equal('OK');
+		// 	expect(response.body).contain('CAC TAT')
+		// })
+
+		cy.request('https://cac-tat.s3.eu-central-1.amazonaws.com/index.html')
+			.should(function (response) {
+				const { status, statusText, body } = response
+				expect(status).to.equal(200)
+				expect(statusText).to.equal('OK')
+				expect(body).to.include('CAC TAT')
+			})
+	})
+
+	// Seção 13 - Exercicio 1
+	it.only('encontre o gato escondido', function() {
+		cy.get('#cat')
+			.invoke('show')
+			.should('be.visible')
+		cy.get('#title')
+			.invoke('text', 'CAT TAT')
+		cy.get('#subtitle')
+			.invoke('text', 'Eu 🖤 gatos!')
+	})
 })
