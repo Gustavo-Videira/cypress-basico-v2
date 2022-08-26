@@ -8,6 +8,8 @@
 /// <reference types="Cypress" />
 
 describe('Central de Atendimento ao Cliente TAT', function() {
+	const THREE_SECONDS_IN_MS = 3000
+
 	beforeEach(() => {
 		cy.visit('./src/index.html')
 	})
@@ -18,26 +20,32 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 
 	// Seção 3 - Exercicio 1
 	it('preenche os campos obrigatórios e envia o formulário', function() {
+		cy.clock()
+
 		cy.get('#firstName').type('Gustavo')
-		cy.get('#lastName').type('Henrique Videira Martins')
-		cy.get('#email').type('gustavo@magussistemas.com.br')
-		cy.get('#phone').type('1899999999')
+		cy.get('#lastName').type('Henrique')
+		cy.get('#email').type('gustavo@exemplo.com')
 		cy.get('#open-text-area').type('Teste de automação cypress', {delay: 0})
 		
 		cy.get('button[type="submit"]').click()
 		cy.get('.success').should('be.visible')
+		cy.tick(THREE_SECONDS_IN_MS)
+		cy.get('.success').should('not.be.visible')
 	})
 
 	// Seção 3 - Exercicio 2
 	it('exibe mensagem de erro ao submeter o formulário com um email com formatação inválida', function() {
+		cy.clock()
+
 		cy.get('#firstName').type('Gustavo')
-		cy.get('#lastName').type('Henrique Videira Martins')
-		cy.get('#email').type('gustavo@magussistemas,com.br')
-		cy.get('#phone').type('1899999999')
+		cy.get('#lastName').type('Henrique')
+		cy.get('#email').type('gustavo@exemplo,com')
 		cy.get('#open-text-area').type('Teste de automação cypress', {delay: 0})
 
 		cy.get('button[type="submit"]').click()
 		cy.get('.error').should('be.visible')
+		cy.tick(THREE_SECONDS_IN_MS)
+		cy.get('.error').should('not.be.visible')
 	})
 
 	// Seção 3 - Exercicio 3
@@ -48,8 +56,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 	// Seção 3 - Exercicio 4
 	it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', function() {
 		cy.get('#firstName').type('Gustavo')
-		cy.get('#lastName').type('Henrique Videira Martins')
-		cy.get('#email').type('gustavo@magussistemas.com.br')
+		cy.get('#lastName').type('Henrique')
+		cy.get('#email').type('gustavo@exemplo.com')
 		cy.get('#phone-checkbox').check()
 		cy.get('#open-text-area').type('Teste de automação cypress', {delay: 0})
 		
@@ -66,14 +74,14 @@ describe('Central de Atendimento ao Cliente TAT', function() {
 			.should('have.value', '')
 		
 		cy.get('#lastName')
-			.type('Henrique Videira Martins')
-			.should('have.value', 'Henrique Videira Martins')
+			.type('Henrique')
+			.should('have.value', 'Henrique')
 			.clear()
 			.should('have.value', '')
 		
 		cy.get('#email')
-			.type('gustavo@magussistemas.com.br')
-			.should('have.value', 'gustavo@magussistemas.com.br')
+			.type('gustavo@exemplo.com')
+			.should('have.value', 'gustavo@exemplo.com')
 			.clear()
 			.should('have.value', '')
 		
